@@ -1,66 +1,104 @@
-import os
-os.system('cls')
+import telaConfigAcoes
+import telaLogin
+import login
+import telaConfigGestos
+import telaApagarConta
+import telaAtualizarEmail
+import telaExportar
+import telaImportar
+
+
+id_usuario = None
 
 def menu():
     print("-=-=-=-=-=-=-=-=-=-= MENU -=-=-=-=-=-=-=-=-=-=-|")
-    print("1.....Cadastrar Gestos..........:              |")
-    print("2.....Cadastrar Ações...........:              |")
-    print("3.....Configurar Feedback.......:              |")
-    print("4.....Exportar / Importar dados.:              |")
-    print("5.....Apagar dados..............:              |")
-    print("6.....Voltar tela Operação......:              |")
-    print("7.....Sair......................:              |")
+    print("1......Trabalhar Gestos.........:              |")
+    print("2.......Trabalhar Ações.........:              |")
+    print("3.....Exportar / Importar dados.:              |")
+    print("4.....Apagar conta..............:              |")
+    print("5.....Atualizar email...........:              |")
+    print("0.....Logout....................:              |")
     print("-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-|")
 
-def opcao1():
-    print("-=-=-=-=-=-=-= CADASTRAR GESTOS -=-=-=-=-=-=-=-|")
-    print("programa aqui...              |")
+def Gestos():
+    global id_usuario
+    if id_usuario is not None:
+        telaConfigGestos.configGestos(id_usuario)
+    else:
+        print("Nenhum usuário logado. Faça login primeiro.")
 
-def opcao2():
-    print("-=-=-=-=-=-=-= CADASTRAR AÇÕES -=-=-=-=-=-=-=-=|")
-    print("programa aqui...              |")
+def cadastrarAcoes():
+    global id_usuario
+    if id_usuario is not None:
+        telaConfigAcoes.configAcoes(id_usuario)
+    else:
+        print("Nenhum usuário logado. Faça login primeiro.")
 
-def opcao3():
-    print("-=-=-=-=-=-= CONFIGURAR FEEDBACK -=-=-=-=-=-=-=|")
-    print("programa aqui...              |")
 
-def opcao4():
-    print("-=-=-=-=-= EXPORTAR / IMPORTAR DADOS -=-=-=-=-=|")
-    print("programa aqui...              |")
+def exportarImportarDados():
+    print("\n")
+    print("EXPORTAR / IMPORTAR DADOS -=-=-=-=-=--=-=-=-=-=|")
+    print("1......Exportar Dados...........:              |")
+    print("2......Importar Dados...........:              |")
+    option = input("Digite a sua opção: ")
+    if option == '1':
+        telaExportar.exportarDados(id_usuario)
+    elif option == '2':
+        telaImportar.importarDados(id_usuario)
+    else:
+        print("Opção inválida. Tente novamente dentre as opções acima ou digite 0 para sair:")
 
-def opcao5():
-    print("-=-=-=-=-=-=-=-= APAGAR DADOS -=-=-=-=-=-=-=-=-|")
-    print("programa aqui...              |")
+    
+
+def apagarConta():
+    global id_usuario
+    if id_usuario is not None:
+        email = input("Digite o email da conta a ser apagada: ")
+        password = input("Digite a senha da conta a ser apagada: ")
+
+        confirmacao = input("Tem certeza de que deseja apagar a conta? (S/N): ")
+        if confirmacao.upper() == "S":
+            telaApagarConta.apagarConta(id_usuario, email, password)
+            logoff()
+        else:
+            print("Operação de exclusão da conta cancelada.")
+    else:
+        print("Nenhum usuário logado. Faça login primeiro.")
+
+
           
-def opcao6():
-    print("-=-=-=-=-=-=-=- TELA OPERAÇÃO -=-=-=-=-=-=-=-=-|")
-    print("programa aqui...              |")
+def logoff():
+    global id_usuario
+    id_usuario = None
+    print("Logout realizado!!!.............................")
+    telaLogin.main()
 
-def sair():
-    print("Saindo do programa...")
-    exit()
+def fazerLogin():
+    global id_usuario
+    id_usuario = login.fazerLogin()
+
+
+def processarOpcao(opcao):
+    if opcao == '1':
+        Gestos()
+    elif opcao == '2':
+        cadastrarAcoes()
+    elif opcao == '3':
+        exportarImportarDados()
+    elif opcao == '4':
+        apagarConta()
+    elif opcao == '5':
+        telaAtualizarEmail.atualizarEmail(id_usuario)
+    elif opcao == '0':
+        logoff()
+    else:
+        print("Opção inválida. Tente novamente dentre as opções acima ou digite 0 para sair:")
 
 def main():
     while True:
         menu()
         opcao = input("Digite o número da opção desejada: ")
+        processarOpcao(opcao)
 
-        if opcao == '1':
-            opcao1()
-        elif opcao == '2':
-            opcao2()
-        elif opcao == '3':
-            opcao3()
-        elif opcao == '4':
-            opcao4()
-        elif opcao == '5':
-            opcao5()
-        elif opcao == '6':
-            opcao6()
-        elif opcao == '7':
-            sair()
-        else:
-            print("Opção inválida. Tente novamente dentre as opções acima ou digite 7 para sair:")
+       
 
-if __name__ == "__main__":
-    main()
